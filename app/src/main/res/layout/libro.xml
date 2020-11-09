@@ -6,8 +6,7 @@
         android:id="@+id/cvLibro"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        app:cardBackgroundColor="@android:color/background_light">
+        android:layout_marginTop="5dp">
 
         <LinearLayout
             android:layout_width="match_parent"
