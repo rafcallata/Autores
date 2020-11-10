@@ -4,5 +4,7 @@
     <string name="textoBoton">Buscar Libro</string>
     <string name="inputHint">Título del Libro</string>
     <string name="textovacio">No hay nada</string>
+    <string name="textoadicional">textoadicional</string>
+    <string name="desripcion">Desripcion</string>
 
 </resources>

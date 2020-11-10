@@ -54,12 +54,14 @@ public class RvAdapter extends RecyclerView.Adapter<RvAdapter.LibroViewHolder> i
         else {
             Picasso.with(context).load(mLibro.get(position).imagenlibro).into(holder.fotoLibro);
         }
-        holder.cv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                
-            }
-        });
+        //holder.cv.setOnClickListener(new View.OnClickListener() {
+        //   @Override
+        //   public void onClick(View v) {
+        //       if(listener != null){
+        //           listener.onClick(v);
+        //        }
+        //    }
+        //});
     }
 
     @Override

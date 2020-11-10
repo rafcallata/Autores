@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -100,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
             }catch (JSONException e){
                 e.printStackTrace();
             }
-            RecyclerView recyclerView = (RecyclerView) findViewById(R.id.RvLibros);
+            final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.RvLibros);
             recyclerView.setHasFixedSize(true);
 
 
@@ -109,6 +110,21 @@ public class MainActivity extends AppCompatActivity {
             recyclerView.setLayoutManager(linearLayoutManager);
 
             RvAdapter rvAdapter= new RvAdapter(mlibro,getApplicationContext());
+
+            rvAdapter.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getApplicationContext(), DetalleLibro.class);
+                    intent.putExtra("titulo", mlibro.get(recyclerView.getChildAdapterPosition(v)).titulo);
+                    intent.putExtra("autor", mlibro.get(recyclerView.getChildAdapterPosition(v)).autor);
+                    intent.putExtra("anio", mlibro.get(recyclerView.getChildAdapterPosition(v)).anio);
+                    intent.putExtra("descripcion", mlibro.get(recyclerView.getChildAdapterPosition(v)).descripcion);
+                    intent.putExtra("imagenlibro",mlibro.get(recyclerView.getChildAdapterPosition(v)).imagenlibro);
+                    startActivity(intent);
+                }
+            });
+
+
             recyclerView.setAdapter(rvAdapter);
 
         }
