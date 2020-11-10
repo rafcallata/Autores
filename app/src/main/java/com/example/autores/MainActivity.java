@@ -1,6 +1,8 @@
 package com.example.autores;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -37,8 +39,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mInputLibro = (EditText)findViewById(R.id.ingresoLibro);
-        mTextoTitulo = (TextView)findViewById(R.id.titulo);
-        mTextoAutor = (TextView)findViewById(R.id.autorLibro);
+        contruirList();
+
     }
     public void buscarLibro(View view){
         if(mInputLibro.getText().toString().equals("")){
@@ -46,24 +48,14 @@ public class MainActivity extends AppCompatActivity {
         }
         else {
             String cadenaBusqueda = mInputLibro.getText().toString();
-            new ConseguirLibro(mTextoTitulo, mTextoAutor, mTextoDescripcion, mTextoanio).execute(cadenaBusqueda);
+            new ConseguirLibro().execute(cadenaBusqueda);
             super.onRestart();
         }
     }
 
     public class ConseguirLibro extends AsyncTask<String,Void,String> {
 
-        private WeakReference<TextView> mTextoTitulo;
-        private WeakReference<TextView> mTextoAutor;
-        private WeakReference<TextView> mTextoDescripcion;
-        private WeakReference<TextView> mTextoanio;
 
-        ConseguirLibro(TextView tituloTexto, TextView autorTexto,TextView descripcionTexto, TextView anioTexto){
-            this.mTextoTitulo = new WeakReference<>(tituloTexto);
-            this.mTextoAutor = new WeakReference<>(autorTexto);
-            this.mTextoDescripcion = new WeakReference<>(descripcionTexto);
-            this.mTextoanio = new WeakReference<>(anioTexto);
-        }
 
         @Override
         protected String doInBackground(String... strings) {
@@ -82,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
                 String link = null;
                 String anio = null;
                 String descripcion = null;
-                ImageView imagen=(ImageView)findViewById(R.id.imagenlibro);
+
                 mlibro.clear();
                 while(i < itemsArray.length()){
                     JSONObject libro = itemsArray.getJSONObject(i);
@@ -95,23 +87,29 @@ public class MainActivity extends AppCompatActivity {
                         anio = volumeInfo.getString("publishedDate");
                         link=imagenlinks.getString("smallThumbnail");
                         link=link.replace("http","https");
-                        Picasso.with(MainActivity.this).load(link).into(imagen);
-                        mlibro.add(new Ent_Libro(titulo,autores,descripcion,anio));
                     }catch (Exception e){
                         e.printStackTrace();
                     }
                     i++;
                     if(titulo != null && autores != null){
-                        mTextoTitulo.get().setText(titulo);
-                        mTextoAutor.get().setText(autores);
+                        mlibro.add(new Ent_Libro(titulo,autores,descripcion,anio,link));
                     }else{
-                        mTextoTitulo.get().setText("No existen resultados para la consulta");
-                        mTextoAutor.get().setText("");
+                        mlibro.add(new Ent_Libro("","","","",""));
                     }
                 }
             }catch (JSONException e){
                 e.printStackTrace();
             }
+            RecyclerView recyclerView = (RecyclerView) findViewById(R.id.RvLibros);
+            recyclerView.setHasFixedSize(true);
+
+
+            LinearLayoutManager linearLayoutManager =
+                    new LinearLayoutManager(getApplicationContext());
+            recyclerView.setLayoutManager(linearLayoutManager);
+
+            RvAdapter rvAdapter= new RvAdapter(mlibro,getApplicationContext());
+            recyclerView.setAdapter(rvAdapter);
 
         }
     }

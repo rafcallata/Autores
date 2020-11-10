@@ -11,6 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 public class RvAdapter extends RecyclerView.Adapter<RvAdapter.LibroViewHolder> implements View.OnClickListener {
@@ -46,6 +48,18 @@ public class RvAdapter extends RecyclerView.Adapter<RvAdapter.LibroViewHolder> i
         holder.autorlibro.setText(mLibro.get(position).autor);
         holder.anioLibro.setText(mLibro.get(position).anio);
         holder.descripcionLibro.setText(mLibro.get(position).descripcion);
+        if (mLibro.get(position).imagenlibro.equals("")||mLibro.get(position).imagenlibro==null){
+            holder.fotoLibro.setImageResource(R.drawable.imagenerror);
+        }
+        else {
+            Picasso.with(context).load(mLibro.get(position).imagenlibro).into(holder.fotoLibro);
+        }
+        holder.cv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                
+            }
+        });
     }
 
     @Override
@@ -76,6 +90,7 @@ public class RvAdapter extends RecyclerView.Adapter<RvAdapter.LibroViewHolder> i
             autorlibro = (TextView)itemView.findViewById(R.id.txtAutorLibro);
             anioLibro = (TextView)itemView.findViewById(R.id.txtAnioLibro);
             descripcionLibro = (TextView)itemView.findViewById(R.id.txtDescripcionLibro);
+            fotoLibro=(ImageView)itemView.findViewById(R.id.imgLibro);
         }
     }
 }
